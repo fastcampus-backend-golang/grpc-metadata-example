@@ -6,12 +6,12 @@ option go_package = "./proto";
 import "google/protobuf/empty.proto";
 
 service SecretService {
-  rpc Nonce (google.protobuf.Empty) returns (NonceResponse) {}
+  rpc Token (google.protobuf.Empty) returns (TokenResponse) {}
   rpc Protected (google.protobuf.Empty) returns (ProtectedResponse) {}
 }
 
-message NonceResponse {
-    string nonce = 1;
+message TokenResponse {
+    string token = 1;
 }
 
 message ProtectedResponse {

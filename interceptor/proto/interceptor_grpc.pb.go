@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SecretServiceClient interface {
-	Nonce(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NonceResponse, error)
+	Token(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TokenResponse, error)
 	Protected(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProtectedResponse, error)
 }
 
@@ -35,9 +35,9 @@ func NewSecretServiceClient(cc grpc.ClientConnInterface) SecretServiceClient {
 	return &secretServiceClient{cc}
 }
 
-func (c *secretServiceClient) Nonce(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*NonceResponse, error) {
-	out := new(NonceResponse)
-	err := c.cc.Invoke(ctx, "/metadata.SecretService/Nonce", in, out, opts...)
+func (c *secretServiceClient) Token(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TokenResponse, error) {
+	out := new(TokenResponse)
+	err := c.cc.Invoke(ctx, "/metadata.SecretService/Token", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *secretServiceClient) Protected(ctx context.Context, in *emptypb.Empty, 
 // All implementations must embed UnimplementedSecretServiceServer
 // for forward compatibility
 type SecretServiceServer interface {
-	Nonce(context.Context, *emptypb.Empty) (*NonceResponse, error)
+	Token(context.Context, *emptypb.Empty) (*TokenResponse, error)
 	Protected(context.Context, *emptypb.Empty) (*ProtectedResponse, error)
 	mustEmbedUnimplementedSecretServiceServer()
 }
@@ -66,8 +66,8 @@ type SecretServiceServer interface {
 type UnimplementedSecretServiceServer struct {
 }
 
-func (UnimplementedSecretServiceServer) Nonce(context.Context, *emptypb.Empty) (*NonceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Nonce not implemented")
+func (UnimplementedSecretServiceServer) Token(context.Context, *emptypb.Empty) (*TokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Token not implemented")
 }
 func (UnimplementedSecretServiceServer) Protected(context.Context, *emptypb.Empty) (*ProtectedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Protected not implemented")
@@ -85,20 +85,20 @@ func RegisterSecretServiceServer(s grpc.ServiceRegistrar, srv SecretServiceServe
 	s.RegisterService(&SecretService_ServiceDesc, srv)
 }
 
-func _SecretService_Nonce_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SecretService_Token_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SecretServiceServer).Nonce(ctx, in)
+		return srv.(SecretServiceServer).Token(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/metadata.SecretService/Nonce",
+		FullMethod: "/metadata.SecretService/Token",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SecretServiceServer).Nonce(ctx, req.(*emptypb.Empty))
+		return srv.(SecretServiceServer).Token(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -129,8 +129,8 @@ var SecretService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SecretServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Nonce",
-			Handler:    _SecretService_Nonce_Handler,
+			MethodName: "Token",
+			Handler:    _SecretService_Token_Handler,
 		},
 		{
 			MethodName: "Protected",

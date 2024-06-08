@@ -16,7 +16,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	srv := grpc.NewServer()
+	srv := grpc.NewServer(grpc.UnaryInterceptor(ProtectedInterceptor))
 	pb.RegisterSecretServiceServer(srv, &server{})
 
 	reflection.Register(srv)

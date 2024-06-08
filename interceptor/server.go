@@ -10,22 +10,18 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
-var allowedNonce = map[string]time.Time{}
-
-const nonceDuration = 10 * time.Second
-
 type server struct {
 	pb.UnimplementedSecretServiceServer
 }
 
-func (*server) Nonce(ctx context.Context, _ *emptypb.Empty) (*pb.NonceResponse, error) {
+func (*server) Token(ctx context.Context, _ *emptypb.Empty) (*pb.TokenResponse, error) {
 	// buat kunci baru
 	genValue := fmt.Sprintf("%d", rand.Int())
-	allowedNonce[genValue] = time.Now().Add(nonceDuration)
+	allowedToken[genValue] = time.Now().Add(tokenDuration)
 
 	// kirim kunci dalam response
-	return &pb.NonceResponse{
-		Nonce: genValue,
+	return &pb.TokenResponse{
+		Token: genValue,
 	}, nil
 }
 

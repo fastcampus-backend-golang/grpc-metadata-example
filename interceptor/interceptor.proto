@@ -8,6 +8,7 @@ import "google/protobuf/empty.proto";
 service SecretService {
   rpc Token (google.protobuf.Empty) returns (TokenResponse) {}
   rpc Protected (google.protobuf.Empty) returns (ProtectedResponse) {}
+  rpc ProtectedStream (google.protobuf.Empty) returns (stream ProtectedResponse) {}
 }
 
 message TokenResponse {

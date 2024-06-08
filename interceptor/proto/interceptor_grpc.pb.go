@@ -25,6 +25,7 @@ const _ = grpc.SupportPackageIsVersion7
 type SecretServiceClient interface {
 	Token(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*TokenResponse, error)
 	Protected(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProtectedResponse, error)
+	ProtectedStream(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (SecretService_ProtectedStreamClient, error)
 }
 
 type secretServiceClient struct {
@@ -53,12 +54,45 @@ func (c *secretServiceClient) Protected(ctx context.Context, in *emptypb.Empty, 
 	return out, nil
 }
 
+func (c *secretServiceClient) ProtectedStream(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (SecretService_ProtectedStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &SecretService_ServiceDesc.Streams[0], "/metadata.SecretService/ProtectedStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &secretServiceProtectedStreamClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type SecretService_ProtectedStreamClient interface {
+	Recv() (*ProtectedResponse, error)
+	grpc.ClientStream
+}
+
+type secretServiceProtectedStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *secretServiceProtectedStreamClient) Recv() (*ProtectedResponse, error) {
+	m := new(ProtectedResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // SecretServiceServer is the server API for SecretService service.
 // All implementations must embed UnimplementedSecretServiceServer
 // for forward compatibility
 type SecretServiceServer interface {
 	Token(context.Context, *emptypb.Empty) (*TokenResponse, error)
 	Protected(context.Context, *emptypb.Empty) (*ProtectedResponse, error)
+	ProtectedStream(*emptypb.Empty, SecretService_ProtectedStreamServer) error
 	mustEmbedUnimplementedSecretServiceServer()
 }
 
@@ -71,6 +105,9 @@ func (UnimplementedSecretServiceServer) Token(context.Context, *emptypb.Empty) (
 }
 func (UnimplementedSecretServiceServer) Protected(context.Context, *emptypb.Empty) (*ProtectedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Protected not implemented")
+}
+func (UnimplementedSecretServiceServer) ProtectedStream(*emptypb.Empty, SecretService_ProtectedStreamServer) error {
+	return status.Errorf(codes.Unimplemented, "method ProtectedStream not implemented")
 }
 func (UnimplementedSecretServiceServer) mustEmbedUnimplementedSecretServiceServer() {}
 
@@ -121,6 +158,27 @@ func _SecretService_Protected_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SecretService_ProtectedStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(emptypb.Empty)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(SecretServiceServer).ProtectedStream(m, &secretServiceProtectedStreamServer{stream})
+}
+
+type SecretService_ProtectedStreamServer interface {
+	Send(*ProtectedResponse) error
+	grpc.ServerStream
+}
+
+type secretServiceProtectedStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *secretServiceProtectedStreamServer) Send(m *ProtectedResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // SecretService_ServiceDesc is the grpc.ServiceDesc for SecretService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -137,6 +195,12 @@ var SecretService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SecretService_Protected_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "ProtectedStream",
+			Handler:       _SecretService_ProtectedStream_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "interceptor.proto",
 }

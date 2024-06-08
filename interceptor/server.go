@@ -30,3 +30,17 @@ func (*server) Protected(ctx context.Context, _ *emptypb.Empty) (*pb.ProtectedRe
 		Message: "Welcome!",
 	}, nil
 }
+
+func (*server) ProtectedStream(_ *emptypb.Empty, stream pb.SecretService_ProtectedStreamServer) error {
+	message := []string{"Hello", "World", "Welcome", "to", "gRPC"}
+
+	for _, msg := range message {
+		if err := stream.Send(&pb.ProtectedResponse{
+			Message: msg,
+		}); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}

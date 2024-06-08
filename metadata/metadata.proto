@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package metadata;
+option go_package = "./proto";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service HelloService {
+  rpc Greet (google.protobuf.Empty) returns (GreetResponse) {}
+  rpc SeverTime (google.protobuf.Empty) returns (stream ServerTimeResponse) {}
+}
+
+message GreetResponse {
+  map<string, string> metadata = 1;
+}
+
+message ServerTimeResponse {
+    google.protobuf.Timestamp current_time = 1;
+}

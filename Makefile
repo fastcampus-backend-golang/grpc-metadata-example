@@ -7,5 +7,8 @@ generate-proto-interceptor:
 run-server-metadata:
 	go run ./metadata-example/server/.
 
+run-client-metadata:
+	go run ./metadata-example/client/.
+
 run-server-interceptor:
 	go run ./interceptor-example/server/.

@@ -45,7 +45,7 @@ func (s *server) Greet(ctx context.Context, _ *emptypb.Empty) (*pb.GreetResponse
 	}
 
 	// kirim metadata dari server (harus sebelum response)
-	serverMetadata := metadata.New(map[string]string{"x-server-name": "metadata-server-example"})
+	serverMetadata := metadata.New(map[string]string{"x-server-rpc": "greet-rpc"})
 	grpc.SendHeader(ctx, serverMetadata)
 
 	// kirim response
@@ -65,7 +65,7 @@ func (s *server) SeverTime(_ *emptypb.Empty, stream pb.HelloService_SeverTimeSer
 	}()
 
 	// kirim metadata dari server
-	serverMetadata := metadata.New(map[string]string{"x-server-name": "metadata-server-example"})
+	serverMetadata := metadata.New(map[string]string{"x-server-rpc": "server-time-rpc"})
 	stream.SendHeader(serverMetadata)
 
 	// proses pengiriman waktu

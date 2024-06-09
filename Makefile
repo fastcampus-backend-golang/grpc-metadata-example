@@ -12,3 +12,6 @@ run-client-metadata:
 
 run-server-interceptor:
 	go run ./interceptor-example/server/.
+
+run-client-interceptor:
+	go run ./interceptor-example/client/.

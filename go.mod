@@ -1,4 +1,4 @@
-module github.com/madeindra/grpc-metadata
+module github.com/fastcampus-backend-golang/grpc-metadata-example
 
 go 1.22.2
 

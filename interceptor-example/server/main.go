@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	pb "github.com/madeindra/grpc-metadata/interceptor-example/proto"
+	pb "github.com/fastcampus-backend-golang/grpc-metadata-example/interceptor-example/proto"
 )
 
 func main() {

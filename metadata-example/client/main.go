@@ -6,7 +6,7 @@ import (
 	"io"
 	"log"
 
-	pb "github.com/madeindra/grpc-metadata/metadata-example/proto"
+	pb "github.com/fastcampus-backend-golang/grpc-metadata-example/metadata-example/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"

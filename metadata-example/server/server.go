@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	pb "github.com/madeindra/grpc-metadata/metadata/proto"
+	pb "github.com/madeindra/grpc-metadata/metadata-example/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"

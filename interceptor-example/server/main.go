@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	pb "github.com/madeindra/grpc-metadata/metadata/proto"
+	pb "github.com/madeindra/grpc-metadata/interceptor-example/proto"
 )
 
 func main() {
@@ -16,8 +16,8 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	srv := grpc.NewServer()
-	pb.RegisterHelloServiceServer(srv, &server{})
+	srv := grpc.NewServer(grpc.UnaryInterceptor(ProtectedInterceptor), grpc.StreamInterceptor(ProtectedStreamInterceptior))
+	pb.RegisterSecretServiceServer(srv, &server{})
 
 	reflection.Register(srv)
 

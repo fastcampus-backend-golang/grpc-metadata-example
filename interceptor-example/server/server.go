@@ -6,7 +6,7 @@ import (
 	"math/rand"
 	"time"
 
-	pb "github.com/madeindra/grpc-metadata/interceptor/proto"
+	pb "github.com/madeindra/grpc-metadata/interceptor-example/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v4.25.3
-// source: interceptor.proto
+// source: interceptor-example/interceptor.proto
 
 package proto
 
@@ -202,5 +202,5 @@ var SecretService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "interceptor.proto",
+	Metadata: "interceptor-example/interceptor.proto",
 }
